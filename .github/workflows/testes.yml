@@ -1,0 +1,50 @@
+name: Testes
+
+# Roda a cada push, em pull requests e também manualmente pela aba Actions.
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  testes:
+    name: Rodar testes (exercícios 1 a 6)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar o código
+        uses: actions/checkout@v6
+
+      - name: Instalar Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+
+      - name: Instalar dependências
+        run: pip install -r requirements.txt
+
+      # Cada exercício é um passo separado, para ver no GitHub qual passou e qual falhou.
+      # "!cancelled()" faz os próximos exercícios rodarem mesmo se um anterior falhar.
+      - name: Exercício 1 – Classificação de produto
+        if: ${{ !cancelled() }}
+        run: pytest test_exercicio1.py -v
+
+      - name: Exercício 2 – Inversão de palavras
+        if: ${{ !cancelled() }}
+        run: pytest test_exercicio2.py -v
+
+      - name: Exercício 3 – Validação de CPF simplificada
+        if: ${{ !cancelled() }}
+        run: pytest test_exercicio3.py -v
+
+      - name: Exercício 4 – Código de identificação (Mock)
+        if: ${{ !cancelled() }}
+        run: pytest test_exercicio4.py -v
+
+      - name: Exercício 5 – Verificação de acesso (Mock)
+        if: ${{ !cancelled() }}
+        run: pytest test_exercicio5.py -v
+
+      - name: Exercício 6 – Fila de atendimento (Mock)
+        if: ${{ !cancelled() }}
+        run: pytest test_exercicio6.py -v
